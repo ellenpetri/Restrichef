@@ -6,7 +6,7 @@ public class CriarUsuarioUseCase
 {
     public User Executar(string nome, string email, string senha)
     {
-        var user = new User(nome, email, senha);
+        User user = new(nome, email, senha);
 
         return user;
     }
