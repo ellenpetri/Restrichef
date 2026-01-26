@@ -20,7 +20,7 @@ public class UserRepository(RestrichefDbContext context) : IUserRepository
     }
     public async Task<User?> GetByIdAsync(Guid id)
     {
-        return await _context.Users.Include(u => u.PerfilAlimentar).FirstOrDefaultAsync(u => u.Id == id);
+        return await _context.Users.Include(u => u.PerfilAlimentar).ThenInclude(p => p.Restricoes).FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task UpdateAsync(User user)

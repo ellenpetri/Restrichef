@@ -5,8 +5,7 @@ public class PerfilAlimentar
     public Guid Id { get; private set; }
     public Guid UserId { get; private set; }
 
-    public IReadOnlyCollection<RestricaoAlimentar> Restricoes => _restricoes;
-    private readonly List<RestricaoAlimentar> _restricoes = [];
+    public ICollection<RestricaoAlimentar> Restricoes { get; private set; } = [];
 
     protected PerfilAlimentar() { }
 
@@ -14,23 +13,16 @@ public class PerfilAlimentar
     {
         Id = Guid.NewGuid();
         UserId = userId;
-        _restricoes.AddRange(restricoes);
+
+        foreach (RestricaoAlimentar restricao in restricoes)
+            Restricoes.Add(restricao);
     }
 
-    public void AtualizarRestricoes(IEnumerable<RestricaoAlimentar> restricoes)
+    public void SubstituirRestricoes(IEnumerable<RestricaoAlimentar> restricoes)
     {
-        _restricoes.Clear();
-        _restricoes.AddRange(restricoes);
-    }
+        Restricoes.Clear();
 
-    public void AdicionarRestricao(RestricaoAlimentar restricao)
-    {
-        if (!_restricoes.Contains(restricao))
-            _restricoes.Add(restricao);
-    }
-
-    public void RemoverRestricao(RestricaoAlimentar restricao)
-    {
-        _restricoes.Remove(restricao);
+        foreach (RestricaoAlimentar restricao in restricoes)
+            Restricoes.Add(restricao);
     }
 }

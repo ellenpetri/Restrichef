@@ -8,4 +8,11 @@ public class RestrichefDbContext(DbContextOptions<RestrichefDbContext> options) 
     public DbSet<User> Users => Set<User>();
     public DbSet<PerfilAlimentar> PerfisAlimentares => Set<PerfilAlimentar>();
     public DbSet<RestricaoAlimentar> RestricoesAlimentares => Set<RestricaoAlimentar>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PerfilAlimentar>()
+            .HasMany(p => p.Restricoes)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("PerfilAlimentarRestricoes"));
+    }
 }

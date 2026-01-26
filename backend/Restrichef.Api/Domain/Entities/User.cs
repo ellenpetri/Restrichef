@@ -3,12 +3,12 @@
 public class User
 {
     public Guid Id { get; private set; }
-    public string Nome { get; private set; }
-    public string Email { get; private set; }
-    public string Senha { get; private set; }
+    public string Nome { get; private set; } = null!;
+    public string Email { get; private set; } = null!;
+    public string Senha { get; private set; } = null!;
     public DateTime DataCriacao { get; private set; }
 
-    public PerfilAlimentar PerfilAlimentar { get; private set; }
+    public PerfilAlimentar PerfilAlimentar { get; private set; } = null!;
 
     protected User() { }
 
@@ -21,9 +21,9 @@ public class User
         DataCriacao = DateTime.UtcNow;
     }
 
-    public void DefinirPerfilAlimentar(IEnumerable<RestricaoAlimentar> restricoes)
+    public void DefinirPerfilAlimentar(PerfilAlimentar perfilAlimentar)
     {
-        PerfilAlimentar = new PerfilAlimentar(Id, restricoes);
+        PerfilAlimentar = perfilAlimentar;
     }
 
     public bool PossuiPerfilAlimentar()
@@ -31,3 +31,4 @@ public class User
         return PerfilAlimentar != null;
     }
 }
+
