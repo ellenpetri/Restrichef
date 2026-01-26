@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RestrichefDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CriarUsuarioUseCase>();
+builder.Services.AddScoped<ConfigurarPerfilAlimentarUseCase>();
 
 WebApplication app = builder.Build();
 

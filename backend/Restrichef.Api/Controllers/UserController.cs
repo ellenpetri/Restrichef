@@ -26,4 +26,13 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase) : Controlle
             null
         );
     }
+
+    [HttpPost("perfil-alimentar")]
+    public async Task<IActionResult> ConfigurarPerfilAlimentar([FromBody] ConfigurarPerfilAlimentarRequest request,[FromServices] ConfigurarPerfilAlimentarUseCase useCase)
+    {
+        await useCase.Executar(request.UserId, request.Restricoes);
+
+        return NoContent();
+    }
+
 }
