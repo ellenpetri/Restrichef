@@ -44,16 +44,43 @@ namespace Restrichef.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RestricoesAlimentares",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PerfilAlimentarId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestricoesAlimentares", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RestricoesAlimentares_PerfisAlimentares_PerfilAlimentarId",
+                        column: x => x.PerfilAlimentarId,
+                        principalTable: "PerfisAlimentares",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_PerfisAlimentares_UserId",
                 table: "PerfisAlimentares",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestricoesAlimentares_PerfilAlimentarId",
+                table: "RestricoesAlimentares",
+                column: "PerfilAlimentarId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "RestricoesAlimentares");
+
             migrationBuilder.DropTable(
                 name: "PerfisAlimentares");
 

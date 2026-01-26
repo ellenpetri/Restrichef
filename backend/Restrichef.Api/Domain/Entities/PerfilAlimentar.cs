@@ -17,6 +17,12 @@ public class PerfilAlimentar
         _restricoes.AddRange(restricoes);
     }
 
+    public void AtualizarRestricoes(IEnumerable<RestricaoAlimentar> restricoes)
+    {
+        _restricoes.Clear();
+        _restricoes.AddRange(restricoes);
+    }
+
     public void AdicionarRestricao(RestricaoAlimentar restricao)
     {
         if (!_restricoes.Contains(restricao))

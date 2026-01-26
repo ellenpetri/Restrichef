@@ -7,4 +7,5 @@ public class RestrichefDbContext(DbContextOptions<RestrichefDbContext> options) 
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<PerfilAlimentar> PerfisAlimentares => Set<PerfilAlimentar>();
+    public DbSet<RestricaoAlimentar> RestricoesAlimentares => Set<RestricaoAlimentar>();
 }

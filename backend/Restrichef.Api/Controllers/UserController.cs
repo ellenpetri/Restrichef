@@ -28,11 +28,27 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase) : Controlle
     }
 
     [HttpPost("perfil-alimentar")]
-    public async Task<IActionResult> ConfigurarPerfilAlimentar([FromBody] ConfigurarPerfilAlimentarRequest request,[FromServices] ConfigurarPerfilAlimentarUseCase useCase)
+    public async Task<IActionResult> ConfigurarPerfilAlimentar([FromBody] ConfigurarPerfilAlimentarRequest request, [FromServices] ConfigurarPerfilAlimentarUseCase useCase)
     {
         await useCase.Executar(request.UserId, request.Restricoes);
 
         return NoContent();
     }
 
+    [HttpGet("{userId}/perfil-alimentar")]
+    public async Task<IActionResult> ObterPerfilAlimentar(Guid userId, [FromServices] ObterPerfilAlimentarUseCase useCase)
+    {
+        PerfilAlimentar? perfil = await useCase.Executar(userId);
+
+        if (perfil == null)
+            return NotFound();
+
+        PerfilAlimentarResponse response = new()
+        {
+            UserId = perfil.UserId,
+            Restricoes = perfil.Restricoes.ToList()
+        };
+
+        return Ok(response);
+    }
 }

@@ -25,8 +25,9 @@ public class UserRepository(RestrichefDbContext context) : IUserRepository
 
     public async Task UpdateAsync(User user)
     {
-        _context.Users.Update(user);
+        if (user.PerfilAlimentar != null && _context.Entry(user.PerfilAlimentar).State == EntityState.Detached)
+            _context.PerfisAlimentares.Add(user.PerfilAlimentar);
+
         await _context.SaveChangesAsync();
     }
-
 }

@@ -12,7 +12,7 @@ using Restrichef.Api.Infrastructure.Data;
 namespace Restrichef.Api.Migrations
 {
     [DbContext(typeof(RestrichefDbContext))]
-    [Migration("20260126184426_InitialCreate")]
+    [Migration("20260126220356_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -40,6 +40,30 @@ namespace Restrichef.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("PerfisAlimentares");
+                });
+
+            modelBuilder.Entity("Restrichef.Api.Domain.Entities.RestricaoAlimentar", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PerfilAlimentarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerfilAlimentarId");
+
+                    b.ToTable("RestricoesAlimentares");
                 });
 
             modelBuilder.Entity("Restrichef.Api.Domain.Entities.User", b =>
@@ -75,6 +99,18 @@ namespace Restrichef.Api.Migrations
                         .HasForeignKey("Restrichef.Api.Domain.Entities.PerfilAlimentar", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Restrichef.Api.Domain.Entities.RestricaoAlimentar", b =>
+                {
+                    b.HasOne("Restrichef.Api.Domain.Entities.PerfilAlimentar", null)
+                        .WithMany("Restricoes")
+                        .HasForeignKey("PerfilAlimentarId");
+                });
+
+            modelBuilder.Entity("Restrichef.Api.Domain.Entities.PerfilAlimentar", b =>
+                {
+                    b.Navigation("Restricoes");
                 });
 
             modelBuilder.Entity("Restrichef.Api.Domain.Entities.User", b =>

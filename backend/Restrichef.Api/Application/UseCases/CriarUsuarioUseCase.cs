@@ -10,9 +10,9 @@ public class CriarUsuarioUseCase(IUserRepository userRepository)
 
     public async Task<User> Executar(string nome, string email, string senha)
     {
-        var senhaHash = PasswordHasher.Hash(senha);
+        string senhaHash = PasswordHasher.Hash(senha);
 
-        var user = new User(nome, email, senhaHash);
+        User user = new(nome, email, senhaHash);
 
         await _userRepository.AddAsync(user);
 

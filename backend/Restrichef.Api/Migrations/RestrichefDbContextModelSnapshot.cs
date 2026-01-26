@@ -39,6 +39,30 @@ namespace Restrichef.Api.Migrations
                     b.ToTable("PerfisAlimentares");
                 });
 
+            modelBuilder.Entity("Restrichef.Api.Domain.Entities.RestricaoAlimentar", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PerfilAlimentarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerfilAlimentarId");
+
+                    b.ToTable("RestricoesAlimentares");
+                });
+
             modelBuilder.Entity("Restrichef.Api.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -72,6 +96,18 @@ namespace Restrichef.Api.Migrations
                         .HasForeignKey("Restrichef.Api.Domain.Entities.PerfilAlimentar", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Restrichef.Api.Domain.Entities.RestricaoAlimentar", b =>
+                {
+                    b.HasOne("Restrichef.Api.Domain.Entities.PerfilAlimentar", null)
+                        .WithMany("Restricoes")
+                        .HasForeignKey("PerfilAlimentarId");
+                });
+
+            modelBuilder.Entity("Restrichef.Api.Domain.Entities.PerfilAlimentar", b =>
+                {
+                    b.Navigation("Restricoes");
                 });
 
             modelBuilder.Entity("Restrichef.Api.Domain.Entities.User", b =>
