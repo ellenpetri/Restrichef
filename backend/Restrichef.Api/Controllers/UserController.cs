@@ -10,9 +10,10 @@ namespace Restrichef.Api.Controllers;
 
 [ApiController]
 [Route("api/users")]
-public class UserController(CriarUsuarioUseCase criarUsuarioUseCase) : ControllerBase
+public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuarioUseCase loginUsuarioUseCase) : ControllerBase
 {
     private readonly CriarUsuarioUseCase _criarUsuarioUseCase = criarUsuarioUseCase;
+    private readonly LoginUsuarioUseCase _loginUsuarioUseCase = loginUsuarioUseCase;
 
     [HttpPost]
     public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioRequest request)
@@ -34,6 +35,28 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase) : Controlle
         catch (InvalidOperationException ex)
         {
             return Conflict(new { mensagem = ex.Message });
+        }
+        catch (DbUpdateException)
+        {
+            return Conflict(new { mensagem = "Já existe um usuário cadastrado com este e-mail." });
+        }
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginUsuarioRequest request)
+    {
+        try
+        {
+            User user = await _loginUsuarioUseCase.Executar(
+                request.Email,
+                request.Senha
+            );
+
+            return Ok(new { userId = user.Id });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Unauthorized(new { mensagem = ex.Message });
         }
     }
 

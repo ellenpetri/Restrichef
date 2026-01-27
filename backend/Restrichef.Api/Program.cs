@@ -23,6 +23,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CriarUsuarioUseCase>();
 builder.Services.AddScoped<ConfigurarPerfilAlimentarUseCase>();
 builder.Services.AddScoped<ObterPerfilAlimentarUseCase>();
+builder.Services.AddScoped<LoginUsuarioUseCase>();
 
 WebApplication app = builder.Build();
 
