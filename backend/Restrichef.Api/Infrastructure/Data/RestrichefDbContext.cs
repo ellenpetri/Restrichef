@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restrichef.Api.Domain.Entities;
+using Restrichef.Api.Infrastructure.Data.Seeds;
 
 namespace Restrichef.Api.Infrastructure.Data;
 
@@ -10,9 +11,10 @@ public class RestrichefDbContext(DbContextOptions<RestrichefDbContext> options) 
     public DbSet<RestricaoAlimentar> RestricoesAlimentares => Set<RestricaoAlimentar>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<PerfilAlimentar>()
-            .HasMany(p => p.Restricoes)
-            .WithMany()
-            .UsingEntity(j => j.ToTable("PerfilAlimentarRestricoes"));
+        modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
+        modelBuilder.Entity<PerfilAlimentar>().HasMany(p => p.Restricoes).WithMany().UsingEntity(j => j.ToTable("PerfilAlimentarRestricoes"));
+
+        modelBuilder.Entity<RestricaoAlimentar>().HasData(RestricaoAlimentarSeed.Dados);
     }
 }
