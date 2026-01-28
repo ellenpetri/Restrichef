@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Restrichef.Api.Application.Repositories;
 using Restrichef.Api.Application.UseCases;
 using Restrichef.Api.Infrastructure.Data;
+using System.Text;
 using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -25,6 +28,33 @@ builder.Services.AddScoped<ConfigurarPerfilAlimentarUseCase>();
 builder.Services.AddScoped<ObterPerfilAlimentarUseCase>();
 builder.Services.AddScoped<LoginUsuarioUseCase>();
 
+IConfigurationSection jwtSettings = builder.Configuration.GetSection("Jwt");
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings["Key"]!)
+            ),
+
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -34,6 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
