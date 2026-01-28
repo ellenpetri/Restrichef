@@ -50,10 +50,27 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Detalhar(Guid id)
     {
-        Receita? receita = await context.Receitas.Include(r => r.Ingredientes).ThenInclude(ir => ir.Ingrediente).Include(r => r.PassosPreparo).FirstOrDefaultAsync(r => r.Id == id);
+        Guid userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        PerfilAlimentar? perfil = await context.PerfisAlimentares.Include(p => p.Restricoes).FirstOrDefaultAsync(p => p.UserId == userId);
+
+        Receita? receita = await context.Receitas
+            .Include(r => r.Ingredientes)
+                .ThenInclude(ir => ir.Ingrediente)
+                    .ThenInclude(i => i.Restricoes)
+            .Include(r => r.PassosPreparo)
+            .FirstOrDefaultAsync(r => r.Id == id);
 
         if (receita == null)
             return NotFound();
+
+        List<string> restricoesDaReceita = [.. receita.Ingredientes.SelectMany(ir => ir.Ingrediente.Restricoes).Select(r => r.Nome).Distinct()];
+
+        List<string> restricoesDoPerfil = perfil?.Restricoes.Select(r => r.Nome).ToList() ?? [];
+
+        bool contemRestricoes = restricoesDaReceita.Any(r => restricoesDoPerfil.Contains(r));
+
+        List<string> adequadoPara = [.. restricoesDoPerfil.Where(r => !restricoesDaReceita.Contains(r)).Select(r => $"Sem {r.ToLower()}")];
 
         ReceitaDetalheResponse response = new()
         {
@@ -71,9 +88,10 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
                     Quantidade = $"{ir.Quantidade} {ir.Unidade}"
                 })],
 
-            PassosPreparo = [.. receita.PassosPreparo
-                .OrderBy(p => p.Ordem)
-                .Select(p => p.Descricao)]
+            PassosPreparo = [.. receita.PassosPreparo.OrderBy(p => p.Ordem).Select(p => p.Descricao)],
+
+            AdequadoPara = adequadoPara,
+            ContemRestricoes = contemRestricoes
         };
 
         return Ok(response);
