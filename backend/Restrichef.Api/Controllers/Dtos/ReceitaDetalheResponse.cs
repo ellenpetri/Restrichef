@@ -11,6 +11,9 @@ public class ReceitaDetalheResponse
 
     public List<IngredienteResponse> Ingredientes { get; set; } = [];
     public List<string> PassosPreparo { get; set; } = [];
+
+    public List<string> AdequadoPara { get; set; } = [];
+    public bool ContemRestricoes { get; set; }
 }
 
 public class IngredienteResponse
