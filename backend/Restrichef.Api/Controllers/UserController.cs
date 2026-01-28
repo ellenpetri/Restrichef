@@ -7,6 +7,7 @@ using Restrichef.Api.Application.UseCases;
 using Restrichef.Api.Controllers.Dtos;
 using Restrichef.Api.Domain.Entities;
 using Restrichef.Api.Infrastructure.Data;
+using System.Security.Claims;
 
 namespace Restrichef.Api.Controllers;
 
@@ -65,13 +66,19 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
         }
     }
 
+    [Authorize]
     [HttpPost("perfil-alimentar")]
     public async Task<IActionResult> ConfigurarPerfilAlimentar([FromBody] ConfigurarPerfilAlimentarRequest request, [FromServices] ConfigurarPerfilAlimentarUseCase useCase)
     {
-        await useCase.Executar(request.UserId, request.RestricaoIds);
+        Guid userId = Guid.Parse(
+            User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+        );
+
+        await useCase.Executar(userId, request.RestricaoIds);
         return NoContent();
     }
 
+    [Authorize]
     [HttpGet("restricoes")]
     public async Task<IActionResult> ObterRestricoes([FromServices] RestrichefDbContext context)
     {
@@ -88,9 +95,13 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
     }
 
     [Authorize]
-    [HttpGet("{userId}/perfil-alimentar")]
-    public async Task<IActionResult> ObterPerfilAlimentar(Guid userId, [FromServices] IUserRepository userRepository)
+    [HttpGet("perfil-alimentar")]
+    public async Task<IActionResult> ObterPerfilAlimentar([FromServices] IUserRepository userRepository)
     {
+        Guid userId = Guid.Parse(
+            User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+        );
+
         User? user = await userRepository.GetByIdAsync(userId);
 
         if (user == null || user.PerfilAlimentar == null)
@@ -106,4 +117,5 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
             RestricaoIds = user.PerfilAlimentar.Restricoes.Select(r => r.Id).ToList()
         });
     }
+
 }

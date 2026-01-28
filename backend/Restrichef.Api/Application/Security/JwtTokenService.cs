@@ -14,11 +14,12 @@ public class JwtTokenService(IConfiguration configuration)
     {
         IConfigurationSection jwt = _configuration.GetSection("Jwt");
 
-        Claim[] claims = new[]
-        {
+        Claim[] claims =
+        [
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email)
-        };
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+        ];
 
         SymmetricSecurityKey key = new(
             Encoding.UTF8.GetBytes(jwt["Key"]!)
@@ -30,9 +31,7 @@ public class JwtTokenService(IConfiguration configuration)
             issuer: jwt["Issuer"],
             audience: jwt["Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(
-                int.Parse(jwt["ExpiresInMinutes"]!)
-            ),
+            expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiresInMinutes"]!)),
             signingCredentials: creds
         );
 

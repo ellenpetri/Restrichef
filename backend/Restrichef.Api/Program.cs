@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Restrichef.Api.Application.Repositories;
+using Restrichef.Api.Application.Security;
 using Restrichef.Api.Application.UseCases;
 using Restrichef.Api.Infrastructure.Data;
 using System.Text;
@@ -27,6 +28,7 @@ builder.Services.AddScoped<CriarUsuarioUseCase>();
 builder.Services.AddScoped<ConfigurarPerfilAlimentarUseCase>();
 builder.Services.AddScoped<ObterPerfilAlimentarUseCase>();
 builder.Services.AddScoped<LoginUsuarioUseCase>();
+builder.Services.AddScoped<JwtTokenService>();
 
 IConfigurationSection jwtSettings = builder.Configuration.GetSection("Jwt");
 
