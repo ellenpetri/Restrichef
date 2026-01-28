@@ -1,6 +1,7 @@
 ﻿using Restrichef.Api.Application.Repositories;
 using Restrichef.Api.Application.Security;
 using Restrichef.Api.Domain.Entities;
+using System.Net.Mail;
 
 namespace Restrichef.Api.Application.UseCases;
 
@@ -10,6 +11,18 @@ public class CriarUsuarioUseCase(IUserRepository userRepository)
 
     public async Task<User> Executar(string nome, string email, string senha)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            throw new InvalidOperationException("E-mail é obrigatório.");
+
+        try
+        {
+            new MailAddress(email);
+        }
+        catch (FormatException)
+        {
+            throw new InvalidOperationException("E-mail em formato inválido.");
+        }
+
         User? usuarioExistente = await _userRepository.GetByEmailAsync(email);
 
         if (usuarioExistente != null)
@@ -23,5 +36,4 @@ public class CriarUsuarioUseCase(IUserRepository userRepository)
 
         return user;
     }
-
 }
