@@ -28,6 +28,7 @@ builder.Services.AddScoped<CriarUsuarioUseCase>();
 builder.Services.AddScoped<ConfigurarPerfilAlimentarUseCase>();
 builder.Services.AddScoped<ObterPerfilAlimentarUseCase>();
 builder.Services.AddScoped<LoginUsuarioUseCase>();
+builder.Services.AddScoped<FiltrarReceitasPorPerfilUseCase>();
 builder.Services.AddScoped<JwtTokenService>();
 
 IConfigurationSection jwtSettings = builder.Configuration.GetSection("Jwt");
