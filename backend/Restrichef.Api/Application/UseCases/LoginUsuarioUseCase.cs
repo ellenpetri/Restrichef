@@ -10,6 +10,11 @@ public class LoginUsuarioUseCase(IUserRepository userRepository)
 
     public async Task<User> Executar(string email, string senha)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            throw new InvalidOperationException("E-mail é obrigatório.");
+
+        email = email.Trim().ToLowerInvariant();
+
         User? user = await _userRepository.GetByEmailAsync(email);
 
         if (user == null)

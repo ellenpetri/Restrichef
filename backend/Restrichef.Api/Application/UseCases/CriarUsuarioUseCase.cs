@@ -14,6 +14,8 @@ public class CriarUsuarioUseCase(IUserRepository userRepository)
         if (string.IsNullOrWhiteSpace(email))
             throw new InvalidOperationException("E-mail é obrigatório.");
 
+        email = email.Trim().ToLowerInvariant();
+
         try
         {
             new MailAddress(email);
