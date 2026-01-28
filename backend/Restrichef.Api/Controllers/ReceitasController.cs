@@ -28,8 +28,17 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
 
         List<Receita> resultado = useCase.Executar(receitas, perfil);
 
-        List<ReceitaListagemResponse> response = [.. resultado
-            .Select(receita => new ReceitaListagemResponse
+        List<string> restricoesDoPerfil = [.. perfil.Restricoes.Select(r => r.Nome)];
+
+        List<ReceitaListagemResponse> response = [.. resultado.Select(receita =>
+        {
+            List<string> restricoesDaReceita = [.. receita.Ingredientes.SelectMany(ir => ir.Ingrediente.Restricoes).Select(r => r.Nome).Distinct()];
+
+            bool contemRestricoes = restricoesDaReceita.Any(r => restricoesDoPerfil.Contains(r));
+
+            List<string> adequadoPara =[.. restricoesDoPerfil.Where(r => !restricoesDaReceita.Contains(r)).Select(r => $"Sem {r.ToLower()}")];
+
+            return new ReceitaListagemResponse
             {
                 Id = receita.Id,
                 Nome = receita.Nome,
@@ -38,11 +47,13 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
                 Tempo = $"{receita.TempoMinutos} min",
                 Porcoes = $"Serve {receita.Porcoes} pessoas",
 
-                Tags = [.. receita.Ingredientes
-                    .SelectMany(ir => ir.Ingrediente.Restricoes)
-                    .Select(r => r.Nome)
-                    .Distinct()]
-            })];
+                ContemRestricoes = contemRestricoes,
+                AdequadoPara = adequadoPara,
+
+                Tags = [.. restricoesDaReceita]
+            };
+        })
+        ];
 
         return Ok(response);
     }
