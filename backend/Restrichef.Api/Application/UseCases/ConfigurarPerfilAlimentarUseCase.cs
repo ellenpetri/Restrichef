@@ -12,12 +12,11 @@ public class ConfigurarPerfilAlimentarUseCase(IUserRepository userRepository, Re
 
     public async Task Executar(Guid userId, IEnumerable<Guid> restricaoIds)
     {
-        User user = await _userRepository.GetByIdAsync(userId)
-            ?? throw new InvalidOperationException("Usuário não encontrado");
+        User user = await _userRepository.GetByIdAsync(userId) ?? throw new InvalidOperationException("Usuário não encontrado");
 
-        List<RestricaoAlimentar> restricoes = await _context.RestricoesAlimentares
-            .Where(r => restricaoIds.Contains(r.Id))
-            .ToListAsync();
+        IEnumerable<Guid> ids = restricaoIds?.Where(id => id != Guid.Empty).Distinct() ?? [];
+
+        List<RestricaoAlimentar> restricoes = await _context.RestricoesAlimentares.Where(r => ids.Contains(r.Id)).ToListAsync();
 
         if (user.PerfilAlimentar == null)
             user.DefinirPerfilAlimentar(new PerfilAlimentar(user.Id, restricoes));
@@ -26,4 +25,5 @@ public class ConfigurarPerfilAlimentarUseCase(IUserRepository userRepository, Re
 
         await _userRepository.UpdateAsync(user);
     }
+
 }
