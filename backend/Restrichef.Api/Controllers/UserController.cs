@@ -70,9 +70,7 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
     [HttpPost("perfil-alimentar")]
     public async Task<IActionResult> ConfigurarPerfilAlimentar([FromBody] ConfigurarPerfilAlimentarRequest request, [FromServices] ConfigurarPerfilAlimentarUseCase useCase)
     {
-        Guid userId = Guid.Parse(
-            User.FindFirst(ClaimTypes.NameIdentifier)!.Value
-        );
+        Guid userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         await useCase.Executar(userId, request.RestricaoIds);
         return NoContent();
@@ -98,9 +96,7 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
     [HttpGet("perfil-alimentar")]
     public async Task<IActionResult> ObterPerfilAlimentar([FromServices] IUserRepository userRepository)
     {
-        Guid userId = Guid.Parse(
-            User.FindFirst(ClaimTypes.NameIdentifier)!.Value
-        );
+        Guid userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         User? user = await userRepository.GetByIdAsync(userId);
 
