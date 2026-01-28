@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restrichef.Api.Application.Repositories;
+using Restrichef.Api.Application.Security;
 using Restrichef.Api.Application.UseCases;
 using Restrichef.Api.Controllers.Dtos;
 using Restrichef.Api.Domain.Entities;
@@ -10,10 +12,11 @@ namespace Restrichef.Api.Controllers;
 
 [ApiController]
 [Route("api/users")]
-public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuarioUseCase loginUsuarioUseCase) : ControllerBase
+public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuarioUseCase loginUsuarioUseCase, JwtTokenService jwtTokenService) : ControllerBase
 {
     private readonly CriarUsuarioUseCase _criarUsuarioUseCase = criarUsuarioUseCase;
     private readonly LoginUsuarioUseCase _loginUsuarioUseCase = loginUsuarioUseCase;
+    private readonly JwtTokenService _jwtTokenService = jwtTokenService;
 
     [HttpPost]
     public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioRequest request)
@@ -52,7 +55,9 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
                 request.Senha
             );
 
-            return Ok(new { userId = user.Id });
+            string token = _jwtTokenService.GerarToken(user);
+
+            return Ok(new { token });
         }
         catch (InvalidOperationException ex)
         {
@@ -82,6 +87,7 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
         return Ok(restricoes);
     }
 
+    [Authorize]
     [HttpGet("{userId}/perfil-alimentar")]
     public async Task<IActionResult> ObterPerfilAlimentar(Guid userId, [FromServices] IUserRepository userRepository)
     {
@@ -100,5 +106,4 @@ public class UserController(CriarUsuarioUseCase criarUsuarioUseCase, LoginUsuari
             RestricaoIds = user.PerfilAlimentar.Restricoes.Select(r => r.Id).ToList()
         });
     }
-
 }
