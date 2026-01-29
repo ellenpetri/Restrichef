@@ -21,7 +21,11 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<RestrichefDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<RestrichefDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CriarUsuarioUseCase>();
@@ -58,6 +62,18 @@ builder.Services
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -67,8 +83,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+app.UseCors("Frontend");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
