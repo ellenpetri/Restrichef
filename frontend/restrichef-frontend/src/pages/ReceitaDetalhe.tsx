@@ -1,58 +1,77 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import api from "../api/api";
 
+type Ingrediente = {
+  nome: string;
+  quantidade: string;
+};
 
-type Receita = {
+type ReceitaDetalhe = {
   id: string;
   nome: string;
   descricao: string;
   tempo: string;
   porcoes: string;
-  tags: string[];
+  ingredientes: Ingrediente[];
+  passosPreparo: string[];
   adequadoPara: string[];
   contemRestricoes: boolean;
 };
 
-export default function Receitas() {
-    console.log("Receitas renderizou");
-  const [receitas, setReceitas] = useState<Receita[]>([]);
-  const navigate = useNavigate();
+export default function ReceitaDetalhe() {
+  const { id } = useParams();
+  const [receita, setReceita] = useState<ReceitaDetalhe | null>(null);
 
   useEffect(() => {
     async function carregar() {
-      const response = await api.get<Receita[]>("/api/receitas");
-      setReceitas(response.data);
+      const response = await api.get<ReceitaDetalhe>(`/api/receitas/${id}`);
+      setReceita(response.data);
     }
 
-    carregar();
-  }, []);
+    if (id) {
+      carregar();
+    }
+  }, [id]);
+
+  if (!receita) {
+    return <p>Carregando receita...</p>;
+  }
 
   return (
     <div>
-      <h2>Receitas</h2>
+      <h2>{receita.nome}</h2>
+      <p>{receita.descricao}</p>
 
-      {receitas.map((r) => (
-        <div
-          key={r.id}
-          style={{ border: "1px solid #ccc", marginBottom: 10, padding: 10 }}
-          onClick={() => navigate(`/receitas/${r.id}`)}
-        >
-          <h3>{r.nome}</h3>
-          <p>{r.descricao}</p>
-          <p>{r.tempo} • {r.porcoes}</p>
+      <p>
+        {receita.tempo} • {receita.porcoes}
+      </p>
 
-          {r.adequadoPara.length > 0 && (
-            <p>{r.adequadoPara.join(", ")}</p>
-          )}
+      {receita.adequadoPara.length > 0 && (
+        <p>{receita.adequadoPara.join(", ")}</p>
+      )}
 
-          {r.contemRestricoes && (
-            <strong style={{ color: "red" }}>
-              Contém restrições do seu perfil
-            </strong>
-          )}
-        </div>
-      ))}
+      {receita.contemRestricoes && (
+        <strong style={{ color: "red" }}>
+          Contém restrições do seu perfil
+        </strong>
+      )}
+
+      <h3>Ingredientes</h3>
+      <ul>
+        {receita.ingredientes.map((i, index) => (
+          <li key={index}>
+            {i.quantidade} - {i.nome}
+          </li>
+        ))}
+      </ul>
+
+      <h3>Modo de preparo</h3>
+      <ol>
+        {receita.passosPreparo.map((p, index) => (
+          <li key={index}>{p}</li>
+        ))}
+      </ol>
     </div>
   );
 }
