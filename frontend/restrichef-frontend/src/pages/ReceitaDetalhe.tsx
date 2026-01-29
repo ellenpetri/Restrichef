@@ -42,7 +42,7 @@ export default function ReceitaDetalhe() {
 
   return (
     <div style={{ backgroundColor: COLORS.background }}>
-      <div className="relative h-[420px] w-full">
+      <div className="relative h-105 w-full">
         {receita.imagemUrl ? (
           <img
             src={receita.imagemUrl}
@@ -58,12 +58,21 @@ export default function ReceitaDetalhe() {
         <div className="absolute left-6 top-6 z-10">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-white"
+            className="group flex items-center gap-3 text-sm font-medium text-white transition-all"
           >
-            <ArrowLeft size={18} />
-            Voltar
+            <span
+              className="flex h-9 w-9 items-center justify-center rounded-full transition-transform group-hover:-translate-x-1"
+              style={{ backgroundColor: COLORS.primary }}
+            >
+              <ArrowLeft size={18} className="text-white" />
+            </span>
+
+            <span className="transition-opacity group-hover:opacity-80">
+              Voltar
+            </span>
           </button>
         </div>
+
 
         {!receita.contemRestricoes && (
           <div className="absolute right-6 top-6 z-10 flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 text-sm text-white">
