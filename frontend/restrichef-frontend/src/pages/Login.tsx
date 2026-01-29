@@ -13,7 +13,17 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) navigate("/receitas");
+    if (token) {
+      const perfilConfigurado = localStorage.getItem(
+        "perfil_alimentar_configurado"
+      );
+
+      if (perfilConfigurado) {
+        navigate("/receitas");
+      } else {
+        navigate("/perfil-alimentar");
+      }
+    }
   }, [token, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -22,7 +32,6 @@ export default function Login() {
 
     try {
       await login(email, senha);
-      navigate("/perfil-alimentar");
     } catch {
       setErro("E-mail ou senha inválidos");
     }
@@ -34,7 +43,6 @@ export default function Login() {
       style={{ backgroundColor: COLORS.background }}
     >
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <div
             className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
@@ -55,7 +63,6 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Card */}
         <div
           className="rounded-2xl p-8 shadow-lg"
           style={{ backgroundColor: COLORS.card }}
@@ -72,7 +79,6 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com"
                 className="w-full rounded-lg px-4 py-3 outline-none"
                 style={{
                   backgroundColor: COLORS.inputBg,
@@ -93,7 +99,6 @@ export default function Login() {
                 type="password"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                placeholder="••••••••"
                 className="w-full rounded-lg px-4 py-3 outline-none"
                 style={{
                   backgroundColor: COLORS.inputBg,
@@ -104,9 +109,7 @@ export default function Login() {
             </div>
 
             {erro && (
-              <p className="text-center text-sm text-red-500">
-                {erro}
-              </p>
+              <p className="text-center text-sm text-red-500">{erro}</p>
             )}
 
             <button
