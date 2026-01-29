@@ -86,28 +86,34 @@ export default function Receitas() {
             </button>
 
             {menuAberto && (
-              <div className="absolute right-0 mt-3 w-64 rounded-xl border bg-white shadow-lg z-50">
+              <div className="absolute right-0 mt-3 w-72 rounded-xl border border-gray-200 bg-white shadow-lg z-50 overflow-hidden">
                 <button
                   onClick={() => navigate("/perfil-alimentar")}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50"
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-left transition"
                   style={{ color: COLORS.textTitle }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f5f7fa")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
-                  <User size={16} />
-                  Configuração do Perfil Alimentar
+                  <User size={18} style={{ color: COLORS.primary }} />
+                  <span>Configuração do Perfil Alimentar</span>
                 </button>
 
                 <div className="h-px bg-gray-100" />
 
                 <button
                   onClick={sair}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50"
+                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-left transition"
                   style={{ color: COLORS.textTitle }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f5f7fa")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
-                  <LogOut size={16} />
-                  Sair
+                  <LogOut size={18} style={{ color: COLORS.primary }} />
+                  <span>Sair</span>
                 </button>
               </div>
             )}
+
+
           </div>
         </div>
 
