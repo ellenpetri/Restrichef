@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ChefHat } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
+import { COLORS } from "../styles/colors";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -28,26 +29,43 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F4FAFF] px-4 py-8">
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ backgroundColor: COLORS.background }}
+    >
       <div className="w-full max-w-md">
+        {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary mb-4">
-            <ChefHat className="w-8 h-8 text-white" />
+          <div
+            className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
+            style={{ backgroundColor: COLORS.primary }}
+          >
+            <ChefHat className="h-8 w-8 text-white" />
           </div>
 
-          <h1 className="text-gray-900 mb-2">
+          <h1
+            className="mb-2 text-xl font-semibold"
+            style={{ color: COLORS.textTitle }}
+          >
             Bem-vindo de volta!
           </h1>
 
-          <p className="text-gray-600">
+          <p style={{ color: COLORS.textBody }}>
             Entre para acessar suas receitas personalizadas
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        {/* Card */}
+        <div
+          className="rounded-2xl p-8 shadow-lg"
+          style={{ backgroundColor: COLORS.card }}
+        >
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm text-gray-700 mb-2">
+              <label
+                className="mb-2 block text-sm font-medium"
+                style={{ color: COLORS.textTitle }}
+              >
                 E-mail
               </label>
               <input
@@ -55,13 +73,20 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                className="w-full px-4 py-3 bg-[#EEF4FF] border border-[#D6E4FF] rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                className="w-full rounded-lg px-4 py-3 outline-none"
+                style={{
+                  backgroundColor: COLORS.inputBg,
+                  border: `1px solid ${COLORS.inputBorder}`,
+                }}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm text-gray-700 mb-2">
+              <label
+                className="mb-2 block text-sm font-medium"
+                style={{ color: COLORS.textTitle }}
+              >
                 Senha
               </label>
               <input
@@ -69,29 +94,38 @@ export default function Login() {
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-[#EEF4FF] border border-[#D6E4FF] rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                className="w-full rounded-lg px-4 py-3 outline-none"
+                style={{
+                  backgroundColor: COLORS.inputBg,
+                  border: `1px solid ${COLORS.inputBorder}`,
+                }}
                 required
               />
             </div>
 
             {erro && (
-              <p className="text-sm text-red-500 text-center">
+              <p className="text-center text-sm text-red-500">
                 {erro}
               </p>
             )}
 
             <button
               type="submit"
-              className="w-full bg-primary text-white py-3 px-4 rounded-lg hover:bg-green-600 transition-colors"
+              className="mt-4 w-full rounded-lg py-3 font-medium text-white hover:opacity-90"
+              style={{ backgroundColor: COLORS.primary }}
             >
               Entrar
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
+            <p style={{ color: COLORS.textBody }}>
               Não tem uma conta?{" "}
-              <Link to="/cadastro" className="text-primary hover:underline">
+              <Link
+                to="/cadastro"
+                className="font-medium hover:underline"
+                style={{ color: COLORS.primary }}
+              >
                 Cadastre-se
               </Link>
             </p>
