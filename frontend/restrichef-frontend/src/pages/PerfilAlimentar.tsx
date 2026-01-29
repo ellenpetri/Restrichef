@@ -38,6 +38,7 @@ export default function PerfilAlimentar() {
       restricaoIds: selecionadas,
     });
 
+    localStorage.setItem("perfil_alimentar_configurado", "true");
     navigate("/receitas");
   }
 
