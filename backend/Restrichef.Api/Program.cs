@@ -4,7 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using Restrichef.Api.Application.Repositories;
 using Restrichef.Api.Application.Security;
 using Restrichef.Api.Application.UseCases;
+using Restrichef.Api.Domain.Entities;
 using Restrichef.Api.Infrastructure.Data;
+using Restrichef.Api.Infrastructure.Data.Seeds;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -75,6 +77,34 @@ builder.Services.AddCors(options =>
 });
 
 WebApplication app = builder.Build();
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    RestrichefDbContext context = scope.ServiceProvider.GetRequiredService<RestrichefDbContext>();
+
+    if (!context.Ingredientes.Any())
+    {
+        context.Ingredientes.AddRange(
+            new Ingrediente("Alface"),
+            new Ingrediente("Tomate"),
+            new Ingrediente("Arroz"),
+            new Ingrediente("Feijão"),
+            new Ingrediente("Batata"),
+            new Ingrediente("Tofu")
+        );
+
+        context.SaveChanges();
+    }
+
+    if (!context.Receitas.Any())
+    {
+        List<Ingrediente> ingredientes = context.Ingredientes.ToList();
+        List<Receita> receitas = ReceitaSeed.Criar(ingredientes);
+
+        context.Receitas.AddRange(receitas);
+        context.SaveChanges();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {
