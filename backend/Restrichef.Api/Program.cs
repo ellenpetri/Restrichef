@@ -84,15 +84,10 @@ using (IServiceScope scope = app.Services.CreateScope())
 
     if (!context.Ingredientes.Any())
     {
-        context.Ingredientes.AddRange(
-            new Ingrediente("Alface"),
-            new Ingrediente("Tomate"),
-            new Ingrediente("Arroz"),
-            new Ingrediente("Feijão"),
-            new Ingrediente("Batata"),
-            new Ingrediente("Tofu")
-        );
+        List<RestricaoAlimentar> restricoes = context.RestricoesAlimentares.ToList();
+        List<Ingrediente> ingredientes = IngredienteSeed.Criar(restricoes);
 
+        context.Ingredientes.AddRange(ingredientes);
         context.SaveChanges();
     }
 
