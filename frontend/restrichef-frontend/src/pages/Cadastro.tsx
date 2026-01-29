@@ -5,6 +5,10 @@ import { COLORS } from "../styles/colors";
 import api from "../api/api";
 import axios from "axios";
 
+type BackendError = {
+  mensagem: string;
+};
+
 export default function Cadastro() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -39,20 +43,15 @@ export default function Cadastro() {
       navigate("/login");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        const responseData = error.response?.data;
-
-        if (typeof responseData === "string") {
-          setErroGeral(responseData);
-          return;
-        }
+        const data = error.response?.data;
 
         if (
-          typeof responseData === "object" &&
-          responseData !== null &&
-          "mensagem" in responseData &&
-          typeof (responseData as { mensagem: unknown }).mensagem === "string"
+          typeof data === "object" &&
+          data !== null &&
+          "mensagem" in data &&
+          typeof (data as BackendError).mensagem === "string"
         ) {
-          setErroGeral((responseData as { mensagem: string }).mensagem);
+          setErroGeral((data as BackendError).mensagem);
           return;
         }
       }
