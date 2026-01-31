@@ -81,7 +81,14 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
 
         bool contemRestricoes = restricoesDaReceita.Any(r => restricoesDoPerfil.Contains(r));
 
-        List<string> adequadoPara = [.. restricoesDoPerfil.Where(r => !restricoesDaReceita.Contains(r)).Select(r => $"Sem {r.ToLower()}")];
+        List<string> todasRestricoes = await context.RestricoesAlimentares.Select(r => r.Nome).ToListAsync();
+
+        List<string> adequadoPara = [.. todasRestricoes.Where(r => !restricoesDaReceita.Contains(r)).Select(r =>
+                                        r.Equals("Vegano", StringComparison.OrdinalIgnoreCase) ||
+                                        r.Equals("Vegetariano", StringComparison.OrdinalIgnoreCase)
+                                            ? r
+                                            : $"Sem {r.ToLower()}"
+                                    )];
 
         ReceitaDetalheResponse response = new()
         {

@@ -120,7 +120,7 @@ export default function ReceitaDetalhe() {
                     style={{ backgroundColor: COLORS.primary }}
                   />
                   <span style={{ color: COLORS.textBody }}>
-                    {i.quantidade} {i.nome}
+                    {parseFloat(i.quantidade)} {i.nome}
                   </span>
                 </li>
               ))}

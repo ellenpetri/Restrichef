@@ -147,10 +147,10 @@ export default function Receitas() {
               onClick={() => navigate(`/receitas/${r.id}`)}
               className="overflow-hidden rounded-2xl bg-white text-left shadow-sm transition hover:shadow-md"
             >
-              <div className="h-44 w-full bg-gray-200">
+              <div className="h-44 w-full overflow-hidden bg-gray-200 flex">
                 {r.fotoUrl ? (
                   <img
-                     src={`${api.defaults.baseURL}${r.fotoUrl}`}
+                    src={`${api.defaults.baseURL}${r.fotoUrl}`}
                     alt={r.nome}
                     className="h-full w-full object-cover block"
                   />
@@ -164,7 +164,7 @@ export default function Receitas() {
                 )}
               </div>
 
-              <div className="p-5">
+              <div className="p-5 flex flex-col h-full">
                 <h2
                   className="mb-1 text-lg font-semibold"
                   style={{ color: COLORS.textTitle }}
