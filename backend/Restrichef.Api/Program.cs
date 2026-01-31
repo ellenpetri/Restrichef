@@ -12,6 +12,8 @@ using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("http://+:8080");
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -66,14 +68,7 @@ builder.Services
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Frontend",
-        policy =>
-        {
-            policy
-                .WithOrigins("http://localhost:5173")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+    options.AddPolicy("Frontend", policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 });
 
 WebApplication app = builder.Build();
@@ -123,7 +118,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("Frontend");

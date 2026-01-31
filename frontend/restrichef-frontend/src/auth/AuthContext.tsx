@@ -8,7 +8,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return localStorage.getItem("token");
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   async function login(email: string, senha: string) {
     const response = await api.post("/api/users/login", { email, senha });
