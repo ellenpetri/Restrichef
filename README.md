@@ -1,4 +1,4 @@
-Restrichef 🍽️
+# Restrichef 🍽️
 Aplicação Web Full Stack para Apoio a Pessoas com Restrições Alimentares
 
 ==================================================
