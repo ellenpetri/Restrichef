@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: restrichef-db
+    restart: unless-stopped
+    environment:
+      SA_PASSWORD: "S@RestriChef2026!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+
+  api:
+    build: .
+    container_name: restrichef-api
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=db;Database=RestrichefDb;User Id=sa;Password=S@RestriChef2026!;TrustServerCertificate=True;"
+
+  frontend:
+    build:
+      context: ../../frontend/restrichef-frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:5000
+    container_name: restrichef-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
