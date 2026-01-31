@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restrichef.Api.Domain.Entities;
-using Restrichef.Api.Infrastructure.Data.Seeds;
 
 namespace Restrichef.Api.Infrastructure.Data;
 
@@ -24,7 +23,7 @@ public class RestrichefDbContext(DbContextOptions<RestrichefDbContext> options) 
         modelBuilder.Entity<PerfilAlimentar>().HasMany(p => p.Restricoes).WithMany().UsingEntity(j => j.ToTable("PerfilAlimentarRestricoes"));
 
         // Seed de restrições
-        modelBuilder.Entity<RestricaoAlimentar>().HasData(RestricaoAlimentarSeed.Dados);
+        //modelBuilder.Entity<RestricaoAlimentar>().HasData(RestricaoAlimentarSeed.Dados);
 
         // Receita -> IngredienteReceita
         modelBuilder.Entity<Receita>().HasMany(r => r.Ingredientes).WithOne().HasForeignKey(ir => ir.ReceitaId);

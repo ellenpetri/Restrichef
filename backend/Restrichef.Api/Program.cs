@@ -82,23 +82,39 @@ using (IServiceScope scope = app.Services.CreateScope())
 {
     RestrichefDbContext context = scope.ServiceProvider.GetRequiredService<RestrichefDbContext>();
 
-    if (!context.Ingredientes.Any())
-    {
-        List<RestricaoAlimentar> restricoes = context.RestricoesAlimentares.ToList();
-        List<Ingrediente> ingredientes = IngredienteSeed.Criar(restricoes);
+    context.Database.Migrate();
 
-        context.Ingredientes.AddRange(ingredientes);
-        context.SaveChanges();
-    }
+    context.Database.ExecuteSqlRaw("DELETE FROM IngredientesReceita");
+    context.Database.ExecuteSqlRaw("DELETE FROM PassosPreparo");
 
-    if (!context.Receitas.Any())
-    {
-        List<Ingrediente> ingredientes = context.Ingredientes.ToList();
-        List<Receita> receitas = ReceitaSeed.Criar(ingredientes);
+    context.Database.ExecuteSqlRaw("DELETE FROM IngredienteRestricoes");
+    context.Database.ExecuteSqlRaw("DELETE FROM PerfilAlimentarRestricoes");
 
-        context.Receitas.AddRange(receitas);
-        context.SaveChanges();
-    }
+    context.Database.ExecuteSqlRaw("DELETE FROM Receitas");
+    context.Database.ExecuteSqlRaw("DELETE FROM Ingredientes");
+    context.Database.ExecuteSqlRaw("DELETE FROM RestricoesAlimentares");
+
+    List<RestricaoAlimentar> restricoes = RestricaoAlimentarSeed.Dados
+        .Select(r => new RestricaoAlimentar(
+            nome: (string)r.GetType().GetProperty("Nome")!.GetValue(r)!,
+            descricao: (string)r.GetType().GetProperty("Descricao")!.GetValue(r)!
+        ))
+        .ToList();
+
+    context.RestricoesAlimentares.AddRange(restricoes);
+    context.SaveChanges();
+
+    restricoes = context.RestricoesAlimentares.ToList();
+
+    List<Ingrediente> ingredientes = IngredienteSeed.Criar(restricoes);
+    context.Ingredientes.AddRange(ingredientes);
+    context.SaveChanges();
+
+    ingredientes = context.Ingredientes.ToList();
+
+    List<Receita> receitas = ReceitaSeed.Criar(ingredientes);
+    context.Receitas.AddRange(receitas);
+    context.SaveChanges();
 }
 
 if (app.Environment.IsDevelopment())

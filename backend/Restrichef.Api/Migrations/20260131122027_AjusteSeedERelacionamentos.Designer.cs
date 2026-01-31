@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restrichef.Api.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Restrichef.Api.Infrastructure.Data;
 namespace Restrichef.Api.Migrations
 {
     [DbContext(typeof(RestrichefDbContext))]
-    partial class RestrichefDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131122027_AjusteSeedERelacionamentos")]
+    partial class AjusteSeedERelacionamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

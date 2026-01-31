@@ -6,64 +6,61 @@ public static class IngredienteSeed
 {
     public static List<Ingrediente> Criar(List<RestricaoAlimentar> restricoesExistentes)
     {
-        RestricaoAlimentar GetTag(string nomeRestricao)
-        {
-            RestricaoAlimentar? restricao = restricoesExistentes.FirstOrDefault(r => r.Nome.Equals(nomeRestricao, StringComparison.OrdinalIgnoreCase));
+        RestricaoAlimentar Get(string nome)
+            => restricoesExistentes.First(r => r.Nome == nome);
 
-            if (restricao == null)
-            {
-                return new RestricaoAlimentar("Não Encontrada", "Erro no Seed");
-            }
-            return restricao;
-        }
+        RestricaoAlimentar gluten = Get("Glúten");
+        RestricaoAlimentar lactose = Get("Lactose");
+        RestricaoAlimentar ovo = Get("Ovo");
+        RestricaoAlimentar soja = Get("Soja");
+        RestricaoAlimentar amendoim = Get("Amendoim");
+        RestricaoAlimentar nozes = Get("Nozes e castanhas");
+        RestricaoAlimentar frutosMar = Get("Frutos do mar");
+        RestricaoAlimentar carneVermelha = Get("Carne vermelha");
+        RestricaoAlimentar vegano = Get("Vegano");
+        RestricaoAlimentar vegetariano = Get("Vegetariano");
 
-        RestricaoAlimentar gluten = GetTag("Glúten");
-        RestricaoAlimentar lactose = GetTag("Lactose");
-        RestricaoAlimentar ovo = GetTag("Ovo");
-        RestricaoAlimentar soja = GetTag("Soja");
-        RestricaoAlimentar amendoim = GetTag("Amendoim");
-        RestricaoAlimentar nozes = GetTag("Nozes e castanhas");
-        RestricaoAlimentar frutosMar = GetTag("Frutos do mar");
-        RestricaoAlimentar carneVermelha = GetTag("Carne vermelha");
-        RestricaoAlimentar vegano = GetTag("Vegano");
-        RestricaoAlimentar vegetariano = GetTag("Vegetariano");
+        return
+        [
+            new("Arroz", []),
+            new("Feijão", []),
+            new("Alface", []),
+            new("Tomate", []),
+            new("Cebola", []),
+            new("Batata", []),
+            new("Azeite de Oliva", []),
+            new("Sal", []),
+            new("Alho", []),
+            new("Cenoura", []),
+            new("Abobrinha", []),
+            new("Pimentão", []),
+            new("Espinafre", []),
+            new("Quinoa", []),
+            new("Grão-de-bico", []),
+            new("Lentilha", []),
 
-        List<Ingrediente> ingredientes = [];
+            new("Farinha de Trigo", [gluten]),
+            new("Macarrão Penne", [gluten]),
+            new("Massa de Lasanha", [gluten]),
 
-        ingredientes.Add(new Ingrediente("Arroz", []));
-        ingredientes.Add(new Ingrediente("Feijão", []));
-        ingredientes.Add(new Ingrediente("Alface", []));
-        ingredientes.Add(new Ingrediente("Tomate", []));
-        ingredientes.Add(new Ingrediente("Cebola", []));
-        ingredientes.Add(new Ingrediente("Batata", []));
-        ingredientes.Add(new Ingrediente("Azeite de Oliva", []));
-        ingredientes.Add(new Ingrediente("Sal", []));
+            new("Leite Integral", [lactose, vegano]),
+            new("Creme de Leite", [lactose, vegano]),
+            new("Queijo Mussarela", [lactose, vegano]),
+            new("Queijo Parmesão", [lactose, vegano]),
+            new("Manteiga", [lactose, vegano]),
 
-        ingredientes.Add(new Ingrediente("Farinha de Trigo", [gluten]));
-        ingredientes.Add(new Ingrediente("Macarrão Penne", [gluten]));
+            new("Ovos", [ovo, vegano]),
 
-        ingredientes.Add(new Ingrediente("Leite Integral", [lactose, vegano]));
-        ingredientes.Add(new Ingrediente("Queijo Parmesão", [lactose, vegano]));
-        ingredientes.Add(new Ingrediente("Creme de Leite", [lactose, vegano]));
+            new("Carne Moída", [carneVermelha, vegano, vegetariano]),
+            new("Bacon", [carneVermelha, vegano, vegetariano]),
+            new("Peito de Frango", [vegano, vegetariano]),
 
-        ingredientes.Add(new Ingrediente("Ovos", [ovo, vegano]));
+            new("Filé de Salmão", [frutosMar, vegano, vegetariano]),
 
-        ingredientes.Add(new Ingrediente("Carne Moída", [carneVermelha, vegano, vegetariano]));
-        ingredientes.Add(new Ingrediente("Bacon", [carneVermelha, vegano, vegetariano]));
-
-        ingredientes.Add(new Ingrediente("Camarão", [frutosMar, vegano, vegetariano]));
-        ingredientes.Add(new Ingrediente("Filé de Merluza", [frutosMar, vegano, vegetariano]));
-
-        ingredientes.Add(new Ingrediente("Shoyu", [soja]));
-        ingredientes.Add(new Ingrediente("Tofu", [soja]));
-
-        ingredientes.Add(new Ingrediente("Pasta de Amendoim", [amendoim]));
-        ingredientes.Add(new Ingrediente("Amendoim Torrado", [amendoim]));
-        ingredientes.Add(new Ingrediente("Nozes", [nozes]));
-        ingredientes.Add(new Ingrediente("Castanha de Caju", [nozes]));
-
-        ingredientes.Add(new Ingrediente("Peito de Frango", [vegano, vegetariano]));
-
-        return ingredientes;
+            new("Leite Vegetal", []),
+            new("Açúcar", []),
+            new("Chocolate 70%", []),
+            new("Fermento Químico", [])
+        ];
     }
 }
