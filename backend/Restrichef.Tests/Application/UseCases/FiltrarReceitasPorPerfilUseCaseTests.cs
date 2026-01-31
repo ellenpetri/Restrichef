@@ -17,7 +17,7 @@ public class FiltrarReceitasPorPerfilUseCaseTests
 
         IngredienteReceita ingredienteReceita = new(farinha, 100, "g");
 
-        Receita receita = new("Pão", "Pão simples", 60, 4);
+        Receita receita = new("Pão", "Pão simples", 60, 4, "");
 
         receita.Ingredientes.Add(ingredienteReceita);
 
@@ -42,7 +42,7 @@ public class FiltrarReceitasPorPerfilUseCaseTests
 
         IngredienteReceita ingredienteReceita = new(queijo, 50, "g");
 
-        Receita receita = new("Pizza", "Pizza com queijo", 30, 2);
+        Receita receita = new("Pizza", "Pizza com queijo", 30, 2, "");
 
         receita.Ingredientes.Add(ingredienteReceita);
 
@@ -67,7 +67,7 @@ public class FiltrarReceitasPorPerfilUseCaseTests
 
         IngredienteReceita ingredienteReceita = new(farinha, 100, "g");
 
-        Receita receita = new("Bolo", "Bolo simples", 45, 6);
+        Receita receita = new("Bolo", "Bolo simples", 45, 6, "");
         receita.Ingredientes.Add(ingredienteReceita);
 
         List<Receita> receitas = [receita];
@@ -92,10 +92,10 @@ public class FiltrarReceitasPorPerfilUseCaseTests
         IngredienteReceita ir1 = new(leite, 200, "ml");
         IngredienteReceita ir2 = new(farinha, 100, "g");
 
-        Receita receita1 = new("Vitamina", "Vitamina de leite", 5, 1);
+        Receita receita1 = new("Vitamina", "Vitamina de leite", 5, 1, "");
         receita1.Ingredientes.Add(ir1);
 
-        Receita receita2 = new("Pão", "Pão simples", 60, 4);
+        Receita receita2 = new("Pão", "Pão simples", 60, 4, "");
         receita2.Ingredientes.Add(ir2);
 
         List<Receita> receitas = [receita1, receita2];

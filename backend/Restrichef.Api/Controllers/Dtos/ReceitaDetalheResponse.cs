@@ -8,7 +8,7 @@ public class ReceitaDetalheResponse
 
     public string Tempo { get; set; } = string.Empty;
     public string Porcoes { get; set; } = string.Empty;
-
+    public string? FotoUrl { get; set; }
     public List<IngredienteResponse> Ingredientes { get; set; } = [];
     public List<string> PassosPreparo { get; set; } = [];
 

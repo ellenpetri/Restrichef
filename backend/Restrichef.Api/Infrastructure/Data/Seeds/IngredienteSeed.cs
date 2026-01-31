@@ -38,6 +38,7 @@ public static class IngredienteSeed
             new("Quinoa", []),
             new("Grão-de-bico", []),
             new("Lentilha", []),
+            new("Cogumelo", []),
 
             new("Farinha de Trigo", [gluten]),
             new("Macarrão Penne", [gluten]),

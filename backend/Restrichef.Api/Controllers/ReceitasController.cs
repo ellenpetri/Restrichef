@@ -49,7 +49,7 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
 
                 ContemRestricoes = contemRestricoes,
                 AdequadoPara = adequadoPara,
-
+                FotoUrl = receita.FotoUrl,
                 Tags = [.. restricoesDaReceita]
             };
         })
@@ -102,7 +102,8 @@ public class ReceitasController(RestrichefDbContext context, FiltrarReceitasPorP
             PassosPreparo = [.. receita.PassosPreparo.OrderBy(p => p.Ordem).Select(p => p.Descricao)],
 
             AdequadoPara = adequadoPara,
-            ContemRestricoes = contemRestricoes
+            ContemRestricoes = contemRestricoes,
+            FotoUrl = receita.FotoUrl
         };
 
         return Ok(response);

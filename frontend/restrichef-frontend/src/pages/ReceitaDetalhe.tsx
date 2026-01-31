@@ -19,7 +19,7 @@ type ReceitaDetalhe = {
   passosPreparo: string[];
   adequadoPara: string[];
   contemRestricoes: boolean;
-  imagemUrl?: string;
+  fotoUrl?: string;
 };
 
 export default function ReceitaDetalhe() {
@@ -43,15 +43,17 @@ export default function ReceitaDetalhe() {
   return (
     <div style={{ backgroundColor: COLORS.background }}>
       <div className="relative h-105 w-full">
-        {receita.imagemUrl ? (
+        {receita.fotoUrl ? (
           <img
-            src={receita.imagemUrl}
+            src={`${api.defaults.baseURL}${receita.fotoUrl}`}
             alt={receita.nome}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover block"
           />
         ) : (
           <div className="h-full w-full bg-gray-300" />
         )}
+
+        <div className="absolute inset-0 bg-black/40" />
 
         <div className="absolute inset-0 bg-black/40" />
 

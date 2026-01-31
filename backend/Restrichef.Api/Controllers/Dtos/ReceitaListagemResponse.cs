@@ -8,7 +8,7 @@ public class ReceitaListagemResponse
     public string Tempo { get; set; } = string.Empty;
     public string Porcoes { get; set; } = string.Empty;
     public bool ContemRestricoes { get; set; }
-
+    public string? FotoUrl { get; set; }
     public List<string> AdequadoPara { get; set; } = [];
     public List<string> Tags { get; set; } = [];
 }

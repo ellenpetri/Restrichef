@@ -12,7 +12,7 @@ type Receita = {
   porcoes: string;
   adequadoPara: string[];
   tags: string[];
-  imagemUrl?: string;
+  fotoUrl?: string;
 };
 
 export default function Receitas() {
@@ -148,11 +148,11 @@ export default function Receitas() {
               className="overflow-hidden rounded-2xl bg-white text-left shadow-sm transition hover:shadow-md"
             >
               <div className="h-44 w-full bg-gray-200">
-                {r.imagemUrl ? (
+                {r.fotoUrl ? (
                   <img
-                    src={r.imagemUrl}
+                     src={`${api.defaults.baseURL}${r.fotoUrl}`}
                     alt={r.nome}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover block"
                   />
                 ) : (
                   <div
