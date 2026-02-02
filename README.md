@@ -113,8 +113,6 @@ docker compose down
 
 ORGANIZAÇÃO DO REPOSITÓRIO
 
-ORGANIZAÇÃO DO REPOSITÓRIO
-
 Restrichef/
 
 - backend/
